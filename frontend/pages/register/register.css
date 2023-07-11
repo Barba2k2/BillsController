@@ -1,0 +1,22 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+body {
+  background: rgb(45, 211, 111);
+  font-family: "Inter", sans-serif;
+  height: 100vh;
+}
+
+form {
+  width: 300px;
+}
+
+label {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+input {
+  border: none;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}

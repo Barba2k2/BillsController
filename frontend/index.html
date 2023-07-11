@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="global.css" />
+    <title>Login - Controle de Gastos</title>
+  </head>
+  <body class="centralize">
+    <form>
+      <div class="form-field">
+        <div><label>E-mail</label></div>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          onchange="onChangeEmail()"
+          placeholder="seu@email.com"
+        />
+        <div class="error" id="email-required-error">E-mail é obrigatório</div>
+        <div class="error" id="email-invalid-error">E-mail é invalido</div>
+      </div>
+      <div class="form-field">
+        <div><label>Senha</label></div>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          onchange="onChangePassword()"
+          placeholder="Senha"
+        />
+        <div class="error" id="password-required-error">
+          Senha é obrigatória
+        </div>
+      </div>
+      <div>
+        <button
+          type="button"
+          class="clear"
+          onclick="recoverPassword()"
+          id="recover-password-button"
+          disabled="true"
+        >
+          Recuperar senha
+        </button>
+      </div>
+      <div>
+        <button
+          type="button"
+          class="solid"
+          id="login-button"
+          disabled="true"
+          onclick="login()"
+        >
+          Entrar
+        </button>
+      </div>
+      <div>
+        <button type="button" class="outline" onclick="register()">
+          Registrar
+        </button>
+      </div>
+    </form>
+  </body>
+
+  <script src="index.js"></script>
+  <script src="validations.js"></script>
+  <script src="loading.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBEUSw_VQpi7nYZmhC1lzli9h-Evv63TwQ",
+      authDomain: "bill-controller-10cd2.firebaseapp.com",
+      projectId: "bill-controller-10cd2",
+      storageBucket: "bill-controller-10cd2.appspot.com",
+      messagingSenderId: "316112588629",
+      appId: "1:316112588629:web:09074499a032e17a7529dc",
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+</html>
