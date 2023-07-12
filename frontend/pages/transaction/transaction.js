@@ -1,8 +1,49 @@
+function saveTransaction() {
+  showLoading();
+
+  const transaction = createTransaction();
+
+  firebase
+    .firestore()
+    .collection("transactions")
+    .add(transaction)
+    .then(() => {
+      hideLoading();
+      window.location.href = "../home/home.html";
+    })
+    .catch(() => {
+      hideLoading();
+      alert("Erro ao salvar transaçao");
+    });
+
+  console.log(transaction);
+}
+
+function createTransaction() {
+  return {
+    type: form.typeExpense().checked ? "expense" : "income",
+    date: form.date().value,
+    money: {
+      currency: form.currency().value,
+      value: parseFloat(form.value().value),
+    },
+    transactionType: form.transactionType().value,
+    description: form.description().value,
+    user: {
+      uid: firebase.auth().currentUser.uid,
+    },
+  };
+}
+
+function cancelTransaction() {
+  window.location.href = "../home/home.html";
+}
+
 function onChangeDate() {
   const date = form.date().value;
   form.dateRequiredError().style.display = !date ? "block" : "none";
 
-  toggleSaveButtonDisabled();
+  toggleSaveButtonDisable();
 }
 
 function onChangeValue() {
@@ -12,7 +53,7 @@ function onChangeValue() {
   form.valueLessOrEqualToZeroError().style.display =
     value <= 0 ? "block" : "none";
 
-  toggleSaveButtonDisabled();
+  toggleSaveButtonDisable();
 }
 
 function onChangeTransactionType() {
@@ -21,11 +62,11 @@ function onChangeTransactionType() {
     ? "block"
     : "none";
 
-  toggleSaveButtonDisabled();
+  toggleSaveButtonDisable();
 }
 
-function toggleSaveButtonDisabled() {
-  form.saveButton().disabled = isFormValid();
+function toggleSaveButtonDisable() {
+  form.saveButton().disabled = !isFormValid();
 }
 
 function isFormValid() {
@@ -39,7 +80,7 @@ function isFormValid() {
     return false;
   }
 
-  const transactionType = fomr.transactionType().value;
+  const transactionType = form.transactionType().value;
   if (!transactionType) {
     return false;
   }
@@ -48,12 +89,15 @@ function isFormValid() {
 }
 
 const form = {
+  currency: () => document.getElementById("currency"),
   date: () => document.getElementById("date"),
+  description: () => document.getElementById("description"),
   dateRequiredError: () => document.getElementById("date-required-error"),
   saveButton: () => document.getElementById("save-button"),
   transactionType: () => document.getElementById("transaction-type"),
   transactionTypeRequiredError: () =>
     document.getElementById("transaction-type-required-error"),
+  typeExpense: () => document.getElementById("expense"),
   value: () => document.getElementById("value"),
   valueRequiredError: () => document.getElementById("value-required-error"),
   valueLessOrEqualToZeroError: () =>
