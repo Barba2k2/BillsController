@@ -6,6 +6,17 @@ body {
   margin: 0;
 }
 
+header {
+  text-align: right;
+}
+
+header button {
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  font-size: 18px;
+  width: auto;
+}
+
 .centralize {
   display: flex;
   justify-content: center;
@@ -17,9 +28,13 @@ body {
 }
 
 input,
-button {
+button,
+select {
   padding: 10px;
   width: -webkit-fill-available;
+}
+input[type="radio"] {
+  width: auto;
 }
 
 .loading {
@@ -27,6 +42,7 @@ button {
   position: fixed;
   width: 100%;
   height: 100%;
+  top: 0;
 }
 
 .loading label {
@@ -77,6 +93,7 @@ button.fab.right {
   background-color: #fff;
   border: none;
   color: rgb(45, 211, 111);
+  margin-top: 10px;
 }
 
 .outline {

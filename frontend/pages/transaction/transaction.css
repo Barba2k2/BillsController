@@ -1,0 +1,28 @@
+main {
+  height: 100vh;
+}
+
+form {
+  width: 300px;
+}
+
+label {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+input {
+  margin: 5px 0;
+}
+
+.label {
+  margin: 3px 0;
+}
+
+.radio-button {
+  margin: 15px 0;
+}
+
+select {
+  margin: 5px 0;
+}
