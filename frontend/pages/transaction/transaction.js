@@ -1,6 +1,6 @@
 if (!isNewTransaction()) {
   const uid = getTransactionUid();
-  findTransactionByUId(uid);
+  findTransactionByUid(uid);
 }
 
 function getTransactionUid() {
@@ -12,7 +12,7 @@ function isNewTransaction() {
   return getTransactionUid() ? false : true;
 }
 
-function findTransactionByUId(uid) {
+function findTransactionByUid(uid) {
   showLoading();
 
   firebase
@@ -23,12 +23,11 @@ function findTransactionByUId(uid) {
     .then((doc) => {
       hideLoading();
       if (doc.exists) {
-        fillTransactionToScreen(doc.data());
+        fillTransactionScreen(doc.data());
         toggleSaveButtonDisable();
       } else {
-        alert("Documento não encontrado");
-        window.location;
-        href = "../home/home.html";
+        alert("Documento nao encontrado");
+        window.location.href = "../home/home.html";
       }
     })
     .catch(() => {
@@ -38,8 +37,8 @@ function findTransactionByUId(uid) {
     });
 }
 
-function fillTransactionToScreen(transaction) {
-  if (transaction.type == "expanse") {
+function fillTransactionScreen(transaction) {
+  if (transaction.type == "expense") {
     form.typeExpense().checked = true;
   } else {
     form.typeIncome().checked = true;
@@ -56,8 +55,6 @@ function fillTransactionToScreen(transaction) {
 }
 
 function saveTransaction() {
-  showLoading();
-
   const transaction = createTransaction();
 
   if (isNewTransaction()) {
@@ -68,6 +65,8 @@ function saveTransaction() {
 }
 
 function save(transaction) {
+  showLoading();
+
   firebase
     .firestore()
     .collection("transactions")
@@ -95,7 +94,7 @@ function update(transaction) {
     })
     .catch(() => {
       hideLoading();
-      alert("Erro ao atualizar transação");
+      alert("Erro ao atualizar transaçao");
     });
 }
 
@@ -113,10 +112,6 @@ function createTransaction() {
       uid: firebase.auth().currentUser.uid,
     },
   };
-}
-
-function cancelTransaction() {
-  window.location.href = "../home/home.html";
 }
 
 function onChangeDate() {

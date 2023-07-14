@@ -18,12 +18,22 @@ ol li:hover {
   opacity: 0.8;
 }
 
-ol li.expanse {
+ol li.expense {
   border-left: 10px solid #ff0000;
 }
 
 ol li.income {
   border-left: 10px solid #008000;
+}
+
+ol li:hover button.danger {
+  display: block;
+}
+
+button.danger {
+  width: auto;
+  float: right;
+  display: none;
 }
 
 p {
