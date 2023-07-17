@@ -1,5 +1,6 @@
 import { TransactionNotFoundError } from "../errors/transaction-uid-not-found.error";
 import { TransactionUidNotInformedError } from "../errors/transaction-uid-not-informed.error";
+import { UserDoesntOwnTransactionError } from "../errors/user-doesnt-own-transaction.error";
 import { UserNotInformedError } from "../errors/user-not-informed.error";
 import { Transaction } from "../model.js";
 
@@ -45,10 +46,26 @@ describe("Transaction model", () => {
         findByUid: () => Promise.resolve(createTransaction()),
       });
       model.uid = 1;
+      model.user = { user: "anyUserUid" };
 
       await model.findByUid();
 
       expect(model).toEqual(createTransaction());
+    });
+
+    test("when user doesnt own transaction, then retrun 403 error", async () => {
+      const transactionDb = createTransaction();
+      transactionDb.user = { user: "anyOtherUserUid" };
+
+      const model = new Transaction({
+        findByUid: () => Promise.resolve(transactionDb),
+      });
+      model.uid = 9;
+      model.user = { uid: "anyUserUid" };
+
+      await expect(model.findByUid()).rejects.toBeInstanceOf(
+        UserDoesntOwnTransactionError
+      );
     });
 
     test("when uid not present, then return error 500", async () => {
@@ -69,24 +86,66 @@ describe("Transaction model", () => {
         TransactionNotFoundError
       );
     });
+  });
 
-    function createTransaction() {
-      const transaction = new Transaction();
-      transaction.uid = 1;
-      transaction.date = "anyDate";
-      transaction.description = "anyDescription";
-      transaction.money = {
+  describe("given create new transaction", () => {
+    const params = {
+      date: "anyDate",
+      description: "anyDescription",
+      money: {
         currency: "anyCurrency",
         value: 10,
-      };
-      transaction.transactionType = "Supermercado";
-      transaction.type = "income";
-      transaction.user = {
+      },
+      transactionType: "Supermercado",
+      type: "income",
+      user: {
         uid: "anyUserUid",
-      };
-      return transaction;
-    }
+      },
+    };
+
+    const repositoryMock = {
+      _hasSaved: false,
+      save() {
+        this._hasSaved = true;
+        return Promise.resolve({ uid: 1 });
+      },
+    };
+
+    test("then return new transaction", async () => {
+      const model = new Transaction(repositoryMock);
+
+      await model.create(params);
+
+      const newTransaction = createTransaction();
+
+      expect(model).toEqual(newTransaction);
+    });
+
+    test("then save transaction", async () => {
+      const model = new Transaction(repositoryMock);
+
+      await model.create(params);
+
+      expect(repositoryMock._hasSaved).toBeTruthy();
+    });
   });
+
+  function createTransaction() {
+    const transaction = new Transaction();
+    transaction.uid = 1;
+    transaction.date = "anyDate";
+    transaction.description = "anyDescription";
+    transaction.money = {
+      currency: "anyCurrency",
+      value: 10,
+    };
+    transaction.transactionType = "Supermercado";
+    transaction.type = "income";
+    transaction.user = {
+      uid: "anyUserUid",
+    };
+    return transaction;
+  }
 
   class TransactionRepositoryMock {
     _response;
